@@ -41,12 +41,17 @@ const posts = [
   { id: 3, authorId: 2, title: 'Advanced GraphQL', votes: 1 },
 ];
 
+let counter = 0;
+
 const resolveFunctions = {
   Query: {
     posts() {
-      throw new Error('oops');
-
-      return posts;
+      if (counter === 0) {
+        counter++;
+        return posts;
+      } else {
+        throw new Error('oops');
+      }
     },
   },
   Author: {
@@ -98,17 +103,17 @@ class InBrowserNetworkInterface {
 const networkInterface = new InBrowserNetworkInterface();
 
 const client = new ApolloClient({
-      networkInterface,
-      dataIdFromObject: r => r.id,
+  networkInterface,
+  dataIdFromObject: r => r.id,
 });
 
-  client.watchQuery({
-    query: allPosts,
-    fetchPolicy: 'cache-and-network',
-  }).subscribe({
-    next: console.log,
-    error: e => {
-        console.log('error caught:', e);
-    },
-  });
+client.watchQuery({
+  query: allPosts,
+  pollingInterval: 5000,
+}).subscribe({
+  next: console.log,
+  error: e => {
+    console.log('error caught:', e);
+  },
+});
 
