@@ -111,4 +111,3 @@ client.watchQuery({
     console.log('error caught:', e);
   },
 });
-

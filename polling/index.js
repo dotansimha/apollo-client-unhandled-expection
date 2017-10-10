@@ -109,11 +109,10 @@ const client = new ApolloClient({
 
 client.watchQuery({
   query: allPosts,
-  pollingInterval: 5000,
+  pollInterval: 5000,
 }).subscribe({
   next: console.log,
   error: e => {
     console.log('error caught:', e);
   },
 });
-
